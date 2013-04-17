@@ -3,6 +3,8 @@ package controllers;
 import dtos.TZDetail;
 import dtos.TZSummary;
 import org.codehaus.jackson.map.ObjectMapper;
+import play.cache.Cache;
+import play.cache.Cached;
 import play.mvc.*;
 import services.ZoneInfoTZService;
 
@@ -24,6 +26,7 @@ public class Application extends Controller {
     @Inject
     private ZoneInfoTZService tzService;
 
+    @Cached(key = "tzs")
     public Result tzs() throws IOException {
         final Collection<TimeZone> tzs = tzService.getAll();
         final Collection<TZSummary> summaries = new ArrayList<>(tzs.size());
@@ -34,13 +37,20 @@ public class Application extends Controller {
     }
 
     public Result tz(final String id, final Long time) throws IOException {
-        final TimeZone tz = tzService.getTz(id);
-        if (tz == null) {
-            return notFound();
+        final String key = "tz" + id + time;
+        final Result cachedResult = (Result) Cache.get(key);
+        if (cachedResult == null) {
+            final TimeZone tz = tzService.getTz(id);
+            if (tz == null) {
+                return notFound();
+            } else {
+                final TZDetail detail = new TZDetail(tz.getID(), tz.getDisplayName(), time, tz.getOffset(time));
+                final Result result = ok(OBJECT_MAPPER.writeValueAsString(detail));
+                Cache.set(key, result);
+                return result;
+            }
         } else {
-            final TZDetail detail = new TZDetail(tz.getID(), tz.getDisplayName(), time, tz.getOffset(time));
-            return ok(OBJECT_MAPPER.writeValueAsString(detail));
+            return cachedResult;
         }
     }
-
 }
