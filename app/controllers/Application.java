@@ -4,39 +4,42 @@ import dtos.TZDetail;
 import dtos.TZSummary;
 import org.codehaus.jackson.map.ObjectMapper;
 import play.mvc.*;
+import services.ZoneInfoTZService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.TimeZone;
 
 /**
  * The main set of web services.
  */
+@Singleton
 public class Application extends Controller {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private static final int SOME_UTC_OFFSET = 10 * 60 * 60000;
 
-    private static final Map<String, TZSummary> tzs = new HashMap<>();
+    @Inject
+    private ZoneInfoTZService tzService;
 
-    static {
-        final TZSummary sydney = new TZSummary("Australia/Sydney", "Sydney");
-        tzs.put(sydney.getId(), sydney);
-        final TZSummary london = new TZSummary("Europe/London", "London");
-        tzs.put(london.getId(), london);
+    public Result tzs() throws IOException {
+        final Collection<TimeZone> tzs = tzService.getAll();
+        final Collection<TZSummary> summaries = new ArrayList<>(tzs.size());
+        for (final TimeZone tz : tzs) {
+            summaries.add(new TZSummary(tz.getID(), tz.getDisplayName()));
+        }
+        return ok(OBJECT_MAPPER.writeValueAsString(summaries));
     }
 
-    public static Result tzs() throws IOException {
-        return ok(OBJECT_MAPPER.writeValueAsString(tzs.values()));
-    }
-
-    public static Result tz(final String id, final Long time) throws IOException {
-        final TZSummary summary = tzs.get(id);
-        if (summary == null) {
+    public Result tz(final String id, final Long time) throws IOException {
+        final TimeZone tz = tzService.getTz(id);
+        if (tz == null) {
             return notFound();
         } else {
-            final TZDetail tz = new TZDetail(summary.getId(), summary.getName(), time, SOME_UTC_OFFSET);
-            return ok(OBJECT_MAPPER.writeValueAsString(tz));
+            final TZDetail detail = new TZDetail(tz.getID(), tz.getDisplayName(), time, tz.getOffset(time));
+            return ok(OBJECT_MAPPER.writeValueAsString(detail));
         }
     }
 
