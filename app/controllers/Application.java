@@ -23,8 +23,12 @@ public class Application extends Controller {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    private final ZoneInfoTZService tzService;
+
     @Inject
-    private ZoneInfoTZService tzService;
+    public Application(final ZoneInfoTZService tzService) {
+        this.tzService = tzService;
+    }
 
     @Cached(key = "tzs")
     public Result tzs() throws IOException {
