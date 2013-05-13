@@ -3,8 +3,17 @@
 # ~~~~
 
 # Home page
+GET     /                           controllers.Assets.at(path="/public", file="index.html")
+
+# Web services
 GET     /tzs                        @controllers.Application.tzs()
 GET     /tzs/*id                    @controllers.Application.tz(id: String, time: Long)
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+# Asking for requirejs doesn't directly yield requirejs as we need to configure it first.
+GET     /lib/require.js             controllers.WebJarAssets.requirejs()
+
+# Resolve webjar assets
+GET     /webjars/*file              controllers.WebJarAssets.at(file)
+
+# Map static resources from the /public folder to the / URL path
+GET     /*file                      controllers.Assets.at(path="/public", file)

@@ -12,11 +12,15 @@ object ApplicationBuild extends Build {
 
     "com.classactionpl.tz" % "zoneinfo-tz" % "1.0.1",
     "com.google.inject" % "guice" % "3.0",
-    "javax.inject" % "javax.inject" % "1"
+    "javax.inject" % "javax.inject" % "1",
+
+    "org.webjars" % "webjars-play" % "2.1.0-1",
+
+    "org.webjars" % "bootstrap" % "2.3.1-1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here      
+    resolvers += Resolver.mavenLocal
   )
 
 }
