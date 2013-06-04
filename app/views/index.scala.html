@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Zone Viewer</title>
+    <script data-main='@routes.Assets.at("javascripts/main.js")' type='text/javascript' src='@routes.WebJarAssets.requirejs()'></script>
+    <link href='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.css"))' rel="stylesheet" type="text/css">
+</head>
+<body ng-controller="Application">
+<button ng-click="listAllTzs()">fetch</button>
+<ul>
+    <li ng-repeat="tz in tzs">
+        {{tz.name}}
+    </li>
+</ul>
+</body>
+</html>

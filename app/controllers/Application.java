@@ -30,6 +30,10 @@ public class Application extends Controller {
         this.tzService = tzService;
     }
 
+    public Result index() {
+        return ok(views.html.index.render());
+    }
+
     @Cached(key = "tzs")
     public Result tzs() throws IOException {
         final Collection<TimeZone> tzs = tzService.getAll();
