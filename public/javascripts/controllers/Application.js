@@ -2,10 +2,10 @@
 
 'use strict';
 
-define(function () {
+define(['module'], function (module) {
 
     function Application($scope, $resource) {
-        var tzsResource = $resource("/tzs");
+        var tzsResource = $resource(module.config().tzs);
 
         $scope.listAllTzs = function () {
             $scope.tzs = tzsResource.query();
