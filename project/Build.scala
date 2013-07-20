@@ -15,7 +15,7 @@ object ApplicationBuild extends Build {
     "com.google.inject" % "guice" % "3.0",
     "javax.inject" % "javax.inject" % "1",
 
-    "org.webjars" %% "webjars-play" % "2.1.0-2",
+    "org.webjars" %% "webjars-play" % "2.1.0-3-SNAPSHOT",
 
     "org.webjars" % "angular-ui-bootstrap" % "0.3.0-1",
     "org.webjars" % "angularjs" % "1.1.5-1"
