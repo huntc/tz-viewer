@@ -10,12 +10,13 @@ object ApplicationBuild extends Build {
 
   val appDependencies = Seq(
     javaCore,
+    cache,
 
     "com.classactionpl.tz" % "zoneinfo-tz" % "1.0.1",
     "com.google.inject" % "guice" % "3.0",
     "javax.inject" % "javax.inject" % "1",
 
-    "org.webjars" %% "webjars-play" % "2.1.0-3-SNAPSHOT",
+    "org.webjars" %% "webjars-play" % "2.2.0-SNAPSHOT",
 
     "org.webjars" % "angular-ui-bootstrap" % "0.3.0-1",
     "org.webjars" % "angularjs" % "1.1.5-1"

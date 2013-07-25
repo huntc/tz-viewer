@@ -1,8 +1,8 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dtos.TZDetail;
 import dtos.TZSummary;
-import org.codehaus.jackson.map.ObjectMapper;
 import play.cache.Cache;
 import play.cache.Cached;
 import play.mvc.*;
